@@ -3,11 +3,9 @@ using Newtonsoft.Json;
 using SQLitePCL;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
 
 namespace Beadando_JakobPKristof_KatonaBence
 {
@@ -120,6 +118,11 @@ namespace Beadando_JakobPKristof_KatonaBence
 		// AI + Kristóf
 		static void AdatbazisLetrehozasa(string dbPath)
 		{
+			if (dbPath == null || string.IsNullOrEmpty(dbPath.ToString()))
+			{
+				Console.WriteLine("Hiba: Az adatbázis elérési útja nem lett megadva.");
+				return;
+			}
 			// Adatbázis létrehozása és kapcsolat nyitása
 			using (SqliteConnection connection = new SqliteConnection(dbPath))
 			{
@@ -127,8 +130,8 @@ namespace Beadando_JakobPKristof_KatonaBence
 				Console.WriteLine("Kapcsolódva az adatbázishoz!");
 
 				// Tábla létrehozása (ha nem létezik)
-				string createTableQuery = @"
-                CREATE TABLE IF NOT EXISTS Szenzorok (
+				var createTableQuery = @"
+                CREATE TABLE IF NOT EXISTS Meresek (
 					Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Datum DATE,
                     HomersekletEgy REAL,
@@ -139,19 +142,24 @@ namespace Beadando_JakobPKristof_KatonaBence
 				using (SqliteCommand command = new SqliteCommand(createTableQuery, connection))
 				{
 					command.ExecuteNonQuery();
-					Console.WriteLine("Szenzorok tábla létrehozva vagy már létezik.");
+					Console.WriteLine("Meresek tábla létrehozva vagy már létezik.");
 				}
 			}
 			Tores();
 		}
 		static void AdatokMentese(string dbPath, string datum, double homereseklet1, double homereseklet2, double sugarzas)
 		{
-			using (SqliteConnection connection = new SqliteConnection(dbPath))
+			if (dbPath == null || string.IsNullOrEmpty(dbPath.ToString()))
+			{
+				Console.WriteLine("Hiba: Az adatbázis elérési útja nem lett megadva.");
+				return;
+			}
+			using (SqliteConnection connection = new SqliteConnection())
 			{
 				connection.Open();
 
-				string insertQuery = @"
-				INSERT INTO Sensors (Datum, HomersekletEgy, HomersekletKetto, Sugarzasi)
+				var insertQuery = @"
+				INSERT INTO Meresek (Datum, HomersekletEgy, HomersekletKetto, Sugarzasi)
 				VALUES (@Datum, @HomersekletEgy, @HomersekletKetto, @Sugarzasi)";
 
 				using (SqliteCommand command = new SqliteCommand(insertQuery, connection))
@@ -166,6 +174,26 @@ namespace Beadando_JakobPKristof_KatonaBence
 				}
 			}
 			Tores();
+		}
+		static void AdatbazisLekerdezes(string dbPath)
+		{
+			using (SQLiteConnection connection = new SQLiteConnection(dbPath))
+			{
+				connection.Open();
+
+				string selectQuery = "SELECT * FROM Meresek";
+
+				using (SQLiteCommand command = new SQLiteCommand(selectQuery, connection))
+				using (SQLiteDataReader reader = command.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						Console.WriteLine($"Id: {reader["Id"]}, Datum: {reader["Datum"]}, " +
+										  $"HomersekletEgy: {reader["HomersekletEgy"]}, HomersekletKetto: {reader["HomersekletKetto"]}, " +
+										  $"Sugarzasi: {reader["Sugarzasi"]}");
+					}
+				}
+			}
 		}
 		//LinQ lekérdezések --> Katona Bence
 		static void LinQFeladatok()
@@ -201,7 +229,7 @@ namespace Beadando_JakobPKristof_KatonaBence
 
 			// SQLite inicializálás
 			Batteries.Init();
-			string dbPath = "Data Source=SensorData.db";
+			string dbPath = @"..\..\HaladoSzofi\SzenzorAdatok.db";
 			AdatbazisLetrehozasa(dbPath);
 			foreach (var item in jwst)
 			{
@@ -211,6 +239,7 @@ namespace Beadando_JakobPKristof_KatonaBence
 				double sugarzas= item.SugárzásiSzint;
 				AdatokMentese(dbPath, datum, ho1,ho2,sugarzas);
 			}
+			AdatbazisLekerdezes(dbPath);
 			Console.ReadKey();
 		}
 	}
