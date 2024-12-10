@@ -101,7 +101,9 @@ namespace Beadando_JakobPKristof_KatonaBence
 			    sugarzas = Math.Round(random.NextDouble() * 10, 2);
 				jwst.Add(new Adat(datum, ho1, ho2, sugarzas));
 			}
+			Tores();
 		}
+		// JSON fájlbaírás - Kristóf
 		static void JSONbaIras()
 		{
 			string json = JsonConvert.SerializeObject(jwst, Formatting.Indented);
@@ -112,7 +114,10 @@ namespace Beadando_JakobPKristof_KatonaBence
 				sw.Close();
 			}
             Console.WriteLine("A mérési adatok mentve lettek a 'meresi_adatok.json' fájlba.");
-        }
+			Tores();
+
+		}
+		// AI + Kristóf
 		static void AdatbazisLetrehozasa(string dbPath)
 		{
 			// Adatbázis létrehozása és kapcsolat nyitása
@@ -137,6 +142,7 @@ namespace Beadando_JakobPKristof_KatonaBence
 					Console.WriteLine("Szenzorok tábla létrehozva vagy már létezik.");
 				}
 			}
+			Tores();
 		}
 		static void AdatokMentese(string dbPath, string datum, double homereseklet1, double homereseklet2, double sugarzas)
 		{
@@ -159,12 +165,39 @@ namespace Beadando_JakobPKristof_KatonaBence
 					Console.WriteLine($"Adatok mentve!");
 				}
 			}
+			Tores();
 		}
+		//LinQ lekérdezések --> Katona Bence
+		static void LinQFeladatok()
+		{
+			// 1. ÁtlagHőmérsékletet számolja ki Kelvinbe
+			var atlagHomerseklet = jwst.Average(adat => (adat.Homerseklet1 + adat.Homerseklet2) / 2);
+			Console.WriteLine($"Átlagos hőmérséklet: {atlagHomerseklet:F2} K");
 
+			// 2. Legmagasabb sugárzási szinthez tartozó mérés
+			var maxSugarzasAdat = jwst.OrderByDescending(adat => adat.SugárzásiSzint).First();
+			Console.WriteLine($"Legmagasabb sugárzási szint: {maxSugarzasAdat.SugárzásiSzint} mért adatai: ");
+			Console.WriteLine($"Dátum: {maxSugarzasAdat.Datum}, Hőmérséklet1: {maxSugarzasAdat.Homerseklet1} K, Hőmérséklet2: {maxSugarzasAdat.Homerseklet2} K");
+
+			// 3. Mérések száma adott hőmérsékleti tartományban
+			int szurtMersekletekSzama = jwst.Count(adat => adat.Homerseklet1 > 250 && adat.Homerseklet2 > 250);
+			Console.WriteLine($"Mérések száma, ahol mindkét hőmérséklet 250 K fölött van: {szurtMersekletekSzama}");
+
+			Tores();
+		}
+		static void Tores()
+		{
+            Console.WriteLine("Nyomjon egy gombot a tovább haladáshoz!");
+            Console.ReadKey(true);
+			Console.Clear();
+		}
 		static void Main()
 		{
 			MeresiAdatokGeneralasa();
+
 			JSONbaIras();
+
+			LinQFeladatok();
 
 			// SQLite inicializálás
 			Batteries.Init();
