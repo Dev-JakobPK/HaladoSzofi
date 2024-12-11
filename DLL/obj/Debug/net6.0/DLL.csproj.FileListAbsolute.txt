@@ -1,0 +1,12 @@
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\bin\Debug\net6.0\DLL.deps.json
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\bin\Debug\net6.0\DLL.dll
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\bin\Debug\net6.0\DLL.pdb
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\DLL.csproj.AssemblyReference.cache
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\DLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\DLL.AssemblyInfoInputs.cache
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\DLL.AssemblyInfo.cs
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\DLL.csproj.CoreCompileInputs.cache
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\DLL.dll
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\refint\DLL.dll
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\DLL.pdb
+C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\DLL\obj\Debug\net6.0\ref\DLL.dll

@@ -6,83 +6,14 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using DLL;
 
 namespace Beadando_JakobPKristof_KatonaBence
 {
-	class Adat
-	{
-		public static int szamlalo = 0;
-		private string datum;
-		public string Datum { 
-			get 
-			{ 
-				return datum; 
-			} 
-			set 
-			{
-				datum = value;
-                Console.WriteLine("A(z) {0}, ID-val rendelkező mérés időbéllyeg meg lett változtatava!",id);
-            } 
-		} // Mérés timestapja
-		private int id;
-		public double Homerseklet1 { get; private set; } // A teleszkópon több hőmérséklet szenzor is található
-		public double Homerseklet2 { get; private set; } // Ezek Kelvinben vannak megadva
-		public double SugárzásiSzint { get; private set; } // Sugárzás szintje
-
-		public Adat(string datum, double homerseklet1, double homerseklet2, double sugárzásiSzint)
-		{
-			id = szamlalo;
-			szamlalo++;
-			Datum = datum;
-			Homerseklet1 = homerseklet1;
-			Homerseklet2 = homerseklet2;
-			SugárzásiSzint = sugárzásiSzint;
-		}
-	}
 	internal class Program
 	{
 		public static List<Adat> jwst = new List<Adat>();
-		static string DatumGen(Random random)
-		{
-			int ev = random.Next(2023, 2025);
-			int honap = random.Next(1, 13);
-			int nap;
 
-			if ((honap < 8 && honap % 2 == 1) || (honap > 7 && honap % 2 == 0))
-			{
-				nap = random.Next(1, 32);
-			}
-			else if (honap == 2 && ev % 4 == 3)
-			{
-				nap = 28;
-			}
-			else
-			{
-				nap = random.Next(0, 31);
-			}
-			string datum;
-			if (honap < 10 && nap > 9)
-			{
-				datum = Convert.ToString(ev + ".0" + honap + "." + nap);
-			}
-			else if (honap < 10 && nap < 10)
-			{
-				datum = Convert.ToString(ev + ".0" + honap + ".0" + nap);
-			}
-			else
-			{
-				datum = Convert.ToString(ev + "." + honap + "." + nap);
-			}
-			return datum;
-		}
-		static double HomersekletGen(Random random)
-		{
-			// Kelvinben a 0 az -273.15 Celsius, 1000 Kelvi után nagyeséllyel elvesztettük a teleszkópot
-			int anomalia = random.Next(0,1000);
-			if (anomalia == 0) return random.Next(0, 1000);
-			// A teleszkópok pontosabban működnek hűtött állapotban
-			return random.Next(0,300);
-		}
 		static void MeresiAdatokGeneralasa()
 		{
 			Random random = new Random();
@@ -93,14 +24,15 @@ namespace Beadando_JakobPKristof_KatonaBence
 
 			for (int i = 0; i < 50; i++)
 			{
-		        datum = DatumGen(random);
-				ho1 = HomersekletGen(random);
-				ho2 = HomersekletGen(random);
-			    sugarzas = Math.Round(random.NextDouble() * 10, 2);
+				datum = Methodusok.DatumGen(random);
+				ho1 = Methodusok.HomersekletGen(random);
+				ho2 = Methodusok.HomersekletGen(random);
+				sugarzas = Math.Round(random.NextDouble() * 10, 2);
 				jwst.Add(new Adat(datum, ho1, ho2, sugarzas));
 			}
-			Tores();
+			Methodusok.Tores();
 		}
+
 		// JSON fájlbaírás - Kristóf
 		static void JSONbaIras()
 		{
@@ -112,7 +44,7 @@ namespace Beadando_JakobPKristof_KatonaBence
 				sw.Close();
 			}
             Console.WriteLine("A mérési adatok mentve lettek a 'meresi_adatok.json' fájlba.");
-			Tores();
+			Methodusok.Tores();
 
 		}
 		// AI + Kristóf
@@ -145,7 +77,7 @@ namespace Beadando_JakobPKristof_KatonaBence
 					Console.WriteLine("Meresek tábla létrehozva vagy már létezik.");
 				}
 			}
-			Tores();
+			Methodusok.Tores();
 		}
 		static void AdatokMentese(string dbPath, string datum, double homereseklet1, double homereseklet2, double sugarzas)
 		{
@@ -173,7 +105,7 @@ namespace Beadando_JakobPKristof_KatonaBence
 					Console.WriteLine($"Adatok mentve!");
 				}
 			}
-			Tores();
+			Methodusok.Tores();
 		}
 		static void AdatbazisLekerdezes(string dbPath)
 		{
@@ -211,13 +143,7 @@ namespace Beadando_JakobPKristof_KatonaBence
 			int szurtMersekletekSzama = jwst.Count(adat => adat.Homerseklet1 > 250 && adat.Homerseklet2 > 250);
 			Console.WriteLine($"Mérések száma, ahol mindkét hőmérséklet 250 K fölött van: {szurtMersekletekSzama}");
 
-			Tores();
-		}
-		static void Tores()
-		{
-            Console.WriteLine("Nyomjon egy gombot a tovább haladáshoz!");
-            Console.ReadKey(true);
-			Console.Clear();
+			Methodusok.Tores();
 		}
 		static void Main()
 		{
