@@ -28,3 +28,9 @@ C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\Beadando_JakobPKristof_
 C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\bin\Debug\x86\sqlite3.dll
 C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\bin\Debug\x64\sqlite3.dll
 C:\Users\Jákob Péter Kristóf\source\repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\obj\Debug\Beadando_JakobPKristof_KatonaBence.exe.config
+C:\Users\Bence\Source\Repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\obj\Debug\Beadando_JakobPKristof_KatonaBence.csproj.AssemblyReference.cache
+C:\Users\Bence\Source\Repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\obj\Debug\Beadando_JakobPKristof_KatonaBence.csproj.SuggestedBindingRedirects.cache
+C:\Users\Bence\Source\Repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\obj\Debug\Beadando_JakobPKristof_KatonaBence.exe.config
+C:\Users\Bence\Source\Repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\obj\Debug\Beadando_JakobPKristof_KatonaBence.csproj.CoreCompileInputs.cache
+C:\Users\Bence\Source\Repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\obj\Debug\Beadando_JakobPKristof_KatonaBence.exe
+C:\Users\Bence\Source\Repos\HaladoSzofi\Beadando_JakobPKristof_KatonaBence\obj\Debug\Beadando_JakobPKristof_KatonaBence.pdb

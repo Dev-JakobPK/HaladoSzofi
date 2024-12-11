@@ -127,31 +127,41 @@ namespace Beadando_JakobPKristof_KatonaBence
 				}
 			}
 		}
-		//LinQ lekérdezések --> Katona Bence
-		static void LinQFeladatok()
-		{
-			// 1. ÁtlagHőmérsékletet számolja ki Kelvinbe
-			var atlagHomerseklet = jwst.Average(adat => (adat.Homerseklet1 + adat.Homerseklet2) / 2);
-			Console.WriteLine($"Átlagos hőmérséklet: {atlagHomerseklet:F2} K");
+        //LinQ lekérdezések --> Katona Bence
 
-			// 2. Legmagasabb sugárzási szinthez tartozó mérés
-			var maxSugarzasAdat = jwst.OrderByDescending(adat => adat.SugárzásiSzint).First();
-			Console.WriteLine($"Legmagasabb sugárzási szint: {maxSugarzasAdat.SugárzásiSzint} mért adatai: ");
-			Console.WriteLine($"Dátum: {maxSugarzasAdat.Datum}, Hőmérséklet1: {maxSugarzasAdat.Homerseklet1} K, Hőmérséklet2: {maxSugarzasAdat.Homerseklet2} K");
+        public delegate double HomersekletConverterCelsiusba(double kelvin); 
 
-			// 3. Mérések száma adott hőmérsékleti tartományban
-			int szurtMersekletekSzama = jwst.Count(adat => adat.Homerseklet1 > 250 && adat.Homerseklet2 > 250);
-			Console.WriteLine($"Mérések száma, ahol mindkét hőmérséklet 250 K fölött van: {szurtMersekletekSzama}");
+        static void LinQFeladatok(List<Adat> jwst)
+        {
+            // Hőmérséklet-átalakítási metódus definiálása lambda kifejezéssel
+            HomersekletConverterCelsiusba kelvinCelsiusra = (kelvin) => kelvin - 273.15;
 
-			Methodusok.Tores();
-		}
-		static void Main()
+            // 1. Átlaghőmérséklet kiszámítása Celsiusban a delegált segítségével
+            var atlagHomerseklet = jwst.Average(adat =>
+                (kelvinCelsiusra(adat.Homerseklet1) + kelvinCelsiusra(adat.Homerseklet2)) / 2);
+            Console.WriteLine($"Átlagos hőmérséklet: {atlagHomerseklet:F2} °C");
+
+            // 2. A legmagasabb sugárzási szintű mérés megkeresése és hőmérsékleteinek átalakítása
+            var maxSugarzasAdat = jwst.OrderByDescending(adat => adat.SugárzásiSzint).First();
+            Console.WriteLine($"Legmagasabb sugárzási szint: {maxSugarzasAdat.SugárzásiSzint} mért adatai: ");
+            Console.WriteLine($"Dátum: {maxSugarzasAdat.Datum}, " +
+                                $"Hőmérséklet1: {kelvinCelsiusra(maxSugarzasAdat.Homerseklet1):F2} °C, " +
+                                $"Hőmérséklet2: {kelvinCelsiusra(maxSugarzasAdat.Homerseklet2):F2} °C");
+
+            // 3. Mérések megszámlálása egy adott hőmérséklet felett (most Celsiusban)
+            int szurtMersekletekSzama = jwst.Count(adat =>
+                kelvinCelsiusra(adat.Homerseklet1) > -23.15 &&
+                kelvinCelsiusra(adat.Homerseklet2) > -23.15);
+            Console.WriteLine($"Mérések száma, ahol mindkét hőmérséklet 0 °C fölött van: {szurtMersekletekSzama}");
+        }
+
+        static void Main()
 		{
 			MeresiAdatokGeneralasa();
 
 			JSONbaIras();
 
-			LinQFeladatok();
+			LinQFeladatok(jwst);
 
 			// SQLite inicializálás
 			Batteries.Init();
