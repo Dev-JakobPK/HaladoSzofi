@@ -1,0 +1,90 @@
+#!/bin/bash
+
+egyezik=0
+osszsorban=0
+osszegyezik=0
+osszl2=0
+osszpint=0
+
+
+if [ $# -eq 0 ]; then
+    echo "Nem adott meg egyetlen fájl nevet sem (nem adott meg paramétert)"
+    exit
+fi
+
+echo "Adja meg a szót:"
+read str
+
+
+if [ -z "$str" ]; then
+    echo "A bekért string nem lehet üres"
+    exit
+fi
+
+
+while [ $# -ne 0 ]; do
+    filename="$1"
+    echo "$filename: "
+
+
+    #--kettes szint--
+    echo -n "Benne van: "
+    sorban = $(grep "$str" "$filename" | wc -l)
+        ((osszsorban+=sorban))
+
+
+    #--A feladat--
+    echo -n "Pontos Egyezés:"
+    egyezik = $(grep "^$str$" "$filename" | wc -l)
+        ((osszegyezik+=egyezik))
+
+
+    #--B feladat--
+    echo -n "Ennyi sorban szerepel legalább kétszer: "
+    l2=$(grep "$str.*$str" "$filename" | wc -l)
+    echo $l2
+        ((osszl2+=l2))
+
+
+    #--C feladat--
+    echo "Pontosan ketszer ennyi sorban: "
+    l3=$(grep "$str.*$str.*$str" "$filename" | wc -l)
+    pont2 = $(expr $l2 - $l3)
+        ((osszpont2+=pont2))
+
+    #VAGY
+    if [ "$(cat "$filename")" = "str" ]
+    then
+        echo "A $fn tartalma egyezik!"
+    fi
+
+
+    --D feladat--
+    if ["$(cat "$filename")" = "str"]
+    then
+        echo "A $filename tartalma egyezik"
+        ((egyezik++))
+    fi
+
+
+    --E feladat(tabbal betold részek)
+
+
+    echo
+    shift
+done
+
+#--D feladat--
+echo "$egyezik db file tartalma egyezik meg a bekert string"
+
+#--E feladat--
+
+echo "$egyezik db file tartalma egyezik meg a bekert szoveggel"
+echo "$osszsorban db sorban szerepel a szoveg"
+echo "$osszegyezik db sorral egyezik meg a szoveg"
+echo "$osszl2 db sorban szerepel legalabb 2x"
+echo "$osszpont2 db sorban szerepel pont 2x"
+
+
+
+#--------kettes szint-----------
